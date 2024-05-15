@@ -3,130 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Endless Runner Game</title>
+    <title>Checkers Game</title>
     <style>
         body {
-            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
         }
-        .game-container {
-            position: relative;
-            width: 800px;
-            height: 400px;
+        .board {
+            display: grid;
+            grid-template-columns: repeat(8, 60px);
+            grid-template-rows: repeat(8, 60px);
+            gap: 0;
             border: 2px solid #333;
-            overflow: hidden;
-            background-color: #a0d2eb;
         }
-        .character {
-            position: absolute;
-            bottom: 10px;
-            left: 50px;
+        .square {
+            width: 60px;
+            height: 60px;
+        }
+        .black {
+            background-color: #769656;
+        }
+        .white {
+            background-color: #eeeed2;
+        }
+        .piece {
             width: 50px;
             height: 50px;
-            background-color: #ff6347;
             border-radius: 50%;
+            margin: 5px;
         }
-        .barrier {
-            position: absolute;
-            bottom: 10px;
-            width: 20px;
-            height: 50px;
-            background-color: #333;
+        .red {
+            background-color: red;
+        }
+        .black-piece {
+            background-color: black;
         }
     </style>
 </head>
 <body>
-    <div class="game-container" id="gameContainer">
-        <div class="character" id="character"></div>
-    </div>
+    <div class="board" id="board"></div>
     <script>
-        const gameContainer = document.getElementById('gameContainer');
-        const character = document.getElementById('character');
-        let barriers = [];
-        let jumping = false;
-        let gameOver = false;
+        const board = document.getElementById('board');
+        const squares = [];
+        let selectedPiece = null;
+        let selectedPieceIndex = null;
 
-        function createBarrier() {
-            const barrier = document.createElement('div');
-            barrier.classList.add('barrier');
-            barrier.style.right = '0px';
-            gameContainer.appendChild(barrier);
-            barriers.push(barrier);
-        }
-
-        function moveBarriers() {
-            barriers.forEach((barrier, index) => {
-                let barrierPosition = parseInt(barrier.style.right);
-                if (barrierPosition >= 800) {
-                    barrier.remove();
-                    barriers.splice(index, 1);
+        function createBoard() {
+            for (let i = 0; i < 64; i++) {
+                const square = document.createElement('div');
+                square.classList.add('square');
+                if (Math.floor(i / 8) % 2 === i % 2) {
+                    square.classList.add('black');
+                    if (i < 24) {
+                        addPiece(square, 'red');
+                    } else if (i >= 40) {
+                        addPiece(square, 'black-piece');
+                    }
                 } else {
-                    barrier.style.right = barrierPosition + 5 + 'px';
+                    square.classList.add('white');
                 }
-            });
-        }
-
-        function jump() {
-            if (jumping) return;
-            jumping = true;
-            let jumpHeight = 0;
-            const jumpInterval = setInterval(() => {
-                if (jumpHeight >= 100) {
-                    clearInterval(jumpInterval);
-                    const fallInterval = setInterval(() => {
-                        if (jumpHeight <= 0) {
-                            clearInterval(fallInterval);
-                            jumping = false;
-                        } else {
-                            jumpHeight -= 5;
-                            character.style.bottom = 10 + jumpHeight + 'px';
-                        }
-                    }, 20);
-                } else {
-                    jumpHeight += 5;
-                    character.style.bottom = 10 + jumpHeight + 'px';
-                }
-            }, 20);
-        }
-
-        function checkCollision() {
-            const characterRect = character.getBoundingClientRect();
-            barriers.forEach(barrier => {
-                const barrierRect = barrier.getBoundingClientRect();
-                if (
-                    characterRect.x < barrierRect.x + barrierRect.width &&
-                    characterRect.x + characterRect.width > barrierRect.x &&
-                    characterRect.y < barrierRect.y + barrierRect.height &&
-                    characterRect.y + characterRect.height > barrierRect.y
-                ) {
-                    gameOver = true;
-                    alert('Game Over!');
-                    location.reload();
-                }
-            });
-        }
-
-        document.addEventListener('keydown', (event) => {
-            if (event.code === 'Space') {
-                jump();
+                square.addEventListener('click', () => selectSquare(i));
+                squares.push(square);
+                board.appendChild(square);
             }
-        });
+        }
 
-        setInterval(() => {
-            if (gameOver) return;
-            createBarrier();
-        }, 2000);
+        function addPiece(square, color) {
+            const piece = document.createElement('div');
+            piece.classList.add('piece', color);
+            square.appendChild(piece);
+        }
 
-        setInterval(() => {
-            if (gameOver) return;
-            moveBarriers();
-            checkCollision();
-        }, 50);
+        function selectSquare(index) {
+            if (selectedPiece) {
+                movePiece(index);
+            } else {
+                selectPiece(index);
+            }
+        }
+
+        function selectPiece(index) {
+            const square = squares[index];
+            const piece = square.querySelector('.piece');
+            if (piece) {
+                selectedPiece = piece;
+                selectedPieceIndex = index;
+                piece.style.border = '2px solid yellow';
+            }
+        }
+
+        function movePiece(index) {
+            const square = squares[index];
+            if (square.classList.contains('black') && !square.querySelector('.piece')) {
+                square.appendChild(selectedPiece);
+                selectedPiece.style.border = '';
+                selectedPiece = null;
+                selectedPieceIndex = null;
+            }
+        }
+
+        createBoard();
     </script>
 </body>
 </html>
