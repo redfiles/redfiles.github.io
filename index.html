@@ -24,6 +24,9 @@
         .square {
             width: 60px;
             height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .black {
             background-color: #769656;
@@ -36,12 +39,20 @@
             height: 50px;
             border-radius: 50%;
             margin: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
         }
         .red {
             background-color: red;
         }
         .black-piece {
             background-color: black;
+        }
+        .highlight {
+            border: 2px solid yellow;
         }
     </style>
 </head>
@@ -52,6 +63,7 @@
         const squares = [];
         let selectedPiece = null;
         let selectedPieceIndex = null;
+        let currentPlayer = 'red';
 
         function createBoard() {
             for (let i = 0; i < 64; i++) {
@@ -90,21 +102,79 @@
         function selectPiece(index) {
             const square = squares[index];
             const piece = square.querySelector('.piece');
-            if (piece) {
+            if (piece && piece.classList.contains(currentPlayer)) {
                 selectedPiece = piece;
                 selectedPieceIndex = index;
-                piece.style.border = '2px solid yellow';
+                piece.classList.add('highlight');
             }
         }
 
         function movePiece(index) {
             const square = squares[index];
-            if (square.classList.contains('black') && !square.querySelector('.piece')) {
+            if (isValidMove(selectedPieceIndex, index)) {
                 square.appendChild(selectedPiece);
-                selectedPiece.style.border = '';
+                selectedPiece.classList.remove('highlight');
+                handleCapture(selectedPieceIndex, index);
                 selectedPiece = null;
                 selectedPieceIndex = null;
+                switchPlayer();
             }
+        }
+
+        function isValidMove(fromIndex, toIndex) {
+            const fromRow = Math.floor(fromIndex / 8);
+            const fromCol = fromIndex % 8;
+            const toRow = Math.floor(toIndex / 8);
+            const toCol = toIndex % 8;
+            const deltaRow = toRow - fromRow;
+            const deltaCol = toCol - fromCol;
+            const toSquare = squares[toIndex];
+
+            if (!toSquare.classList.contains('black') || toSquare.querySelector('.piece')) {
+                return false;
+            }
+
+            if (Math.abs(deltaRow) === 1 && Math.abs(deltaCol) === 1) {
+                return currentPlayer === 'red' ? deltaRow === 1 : deltaRow === -1;
+            }
+
+            if (Math.abs(deltaRow) === 2 && Math.abs(deltaCol) === 2) {
+                const midRow = (fromRow + toRow) / 2;
+                const midCol = (fromCol + toCol) / 2;
+                const midSquare = squares[midRow * 8 + midCol];
+                const midPiece = midSquare.querySelector('.piece');
+
+                return midPiece && midPiece.classList.contains(opponentPlayer());
+            }
+
+            return false;
+        }
+
+        function handleCapture(fromIndex, toIndex) {
+            const fromRow = Math.floor(fromIndex / 8);
+            const fromCol = fromIndex % 8;
+            const toRow = Math.floor(toIndex / 8);
+            const toCol = toIndex % 8;
+
+            if (Math.abs(toRow - fromRow) === 2 && Math.abs(toCol - fromCol) === 2) {
+                const midRow = (fromRow + toRow) / 2;
+                const midCol = (fromCol + toCol) / 2;
+                const midSquare = squares[midRow * 8 + midCol];
+                const midPiece = midSquare.querySelector('.piece');
+                midSquare.removeChild(midPiece);
+            }
+
+            if (currentPlayer === 'red' && toRow === 7 || currentPlayer === 'black' && toRow === 0) {
+                selectedPiece.innerText = 'K';
+            }
+        }
+
+        function switchPlayer() {
+            currentPlayer = currentPlayer === 'red' ? 'black' : 'red';
+        }
+
+        function opponentPlayer() {
+            return currentPlayer === 'red' ? 'black' : 'red';
         }
 
         createBoard();
