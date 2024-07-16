@@ -62,44 +62,29 @@
             <h2>Steps and Findings</h2>
             <ol>
                 <li>
-                    <h3>Step 1: Setting Up HTML</h3>
-                    <p>Start with a basic HTML structure.</p>
-<!--                     <pre>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;title&gt;Writeup Example&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Writeup Example&lt;/h1&gt;
-    &lt;p&gt;Author: Your Name&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre> -->
+                    <h3>Task 1: Welcome!</h3>
+                    <p>Read Dobby's Little Story.</p>
                 </li>
                 <li>
-                    <h3>Step 2: Styling with CSS</h3>
-                    <p>Use CSS to style your writeup for better readability.</p>
-<!--                     <pre>&lt;style&gt;
-    body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    h1, h2, h3, h4, h5, h6 {
-        margin-bottom: 10px;
-    }
-    /* Add more styles as needed */
-&lt;/style&gt;</pre> -->
+                    <h3>Task 2: Magic Letter</h3>
+                    <p>First, read the description. There is an letter with a weird text. It's looks like base64 string.</p>
+                    <p><b>aHR0cHM6Ly9yZWRmaWxlcy5naXRodWIuaW8vCg==</b></p>
+                    <p>Let's decode it.</p>   
+                    <p><b>I decoded that string with following command.</b></p>
+                    <p><b>echo "aHR0cHM6Ly9yZWRmaWxlcy5naXRodWIuaW8vCg==" | base64 -d</b></p>
+                    <p>I got a url, and checked there. I found a weird function in javascript code there. Looks like obfuscated. </p>
+                    <p><b>(function(){
+            var _0x4a65=["\x54\x48\x4D\x7B\x34\x6D\x34\x7A\x69\x6E\x67\x5F\x59\x30\x75\x5F\x46\x30\x75\x6E\x64\x5F\x54\x68\x33\x5F\x46\x69\x72\x35\x74\x5F\x46\x6C\x34\x67\x7D"];
+        })();</b></p>
+                    <p>So, I found a website <a href="https://obf-io.deobfuscate.io/" target="_blank">DEOBFUSCATE JS</a> to deobfuscate. I added console.log(_0x4a65) inside of the obfuscated function to read the variable. And got the first flag.</p>
+                    <p><b>(function(){
+            var _0x4a65=["\x54\x48\x4D\x7B\x34\x6D\x34\x7A\x69\x6E\x67\x5F\x59\x30\x75\x5F\x46\x30\x75\x6E\x64\x5F\x54\x68\x33\x5F\x46\x69\x72\x35\x74\x5F\x46\x6C\x34\x67\x7D"];
+  console.log(_0x4a65)
+        })();</b></p>
                 </li>
                 <li>
-                    <h3>Step 3: Adding Content</h3>
+                    <h3Task 3: Adding Content</h3>
                     <p>Organize your content into sections and paragraphs.</p>
-<!--                     <pre>&lt;section&gt;
-    &lt;h2&gt;Introduction&lt;/h2&gt;
-    &lt;p&gt;This is an example writeup in HTML format.&lt;/p&gt;
-&lt;/section&gt;</pre> -->
                 </li>
             </ol>
         </section>
