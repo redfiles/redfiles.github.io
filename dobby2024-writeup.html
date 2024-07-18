@@ -83,7 +83,7 @@
         })();</b></p>
                 </li>
                 <li>
-                    <h3Task 3: Weird File</h3>
+                    <h3>Task 3: Weird File </h3>
                         <p>First, I downloaded the file and checked what kind of file is this using file command... So, it is an executable file. </p>
                         <p>Next, I gave executable permissions to that file using chmod command.</p>
                         <p><b>chmod +x filename</b></p>
@@ -92,11 +92,11 @@
                         <p>Accoring to the description provided in that task, when we submit the flag we should replace "&" mark with <code>"&amp;"</code> </p>
                 </li>
                 <li>
-                    <h3Task 4: Birthday Gift!</h3>
+                    <h3>Task 4: Birthday Gift!</h3>
                     <p>For this task, we just need some little knowledge to handle with images. It is a jpg image. First, we have to edit file headers using hexedit tool and rename the file to imagename.jpg format. Using, <b>eog imagename.jpg</b>, open the image and see the gift. It is a cat. And again, Try to see metadata information using exiftool. And you will get the flag.</p>
                 </li>
                 <li>
-                    <h3Task 5: Weird Analysis</h3>
+                    <h3>Task 5: Weird Analysis</h3>
                     <p>Do you remember our second task? which we mess around with an executable file. In this matter, we have to deep analysis and have to find which function is vulnerable for buffer overflow. So, have to use a reverse engineering tool like gdb, radare2, ghidra. More than ghidra analysis, try to do this with gdb or radare2 to practice command line reverse engineering. Also, try to find it with ghidra to practice gui analysis.</p>
                     <p>Also, you can try ghidra first, and next try to identify with gdb or radare2</p> 
                         <p><b>Vulnerable function is gets()</b></p>
@@ -104,7 +104,7 @@
                         <p><b>You can get the flag using caesor cipher</b></p>
                 </li>
                 <li>
-                    <h3Task 6: Weird Analysis</h3>
+                    <h3>Task 6: Weird Analysis</h3>
                     <p>Final task, is easy to do.... First, fix header bytes of png image (Google for png header bytes). and fix it.</p>
                         <p>Next, you transparent the image using <b>convert image.png -transparent black image.png</b> and look it with <b>eog image.png</b> command. You will see the flag.</p>
                 </li>
